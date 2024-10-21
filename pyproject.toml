@@ -72,17 +72,16 @@ dev-dependencies = [
     "pre-commit>=3.8.0",
 ]
 
-#url = "https://download.pytorch.org/whl/cu121"
 [[tool.uv.index]]
-name = "torch-cu121"
+name = "torch"
 url = "https://download.pytorch.org/whl/cu121"
 explicit = true
 [[tool.uv.index]]
-name = "torchaudio-cu121"
+name = "torchaudio"
 url = "https://download.pytorch.org/whl/cu121"
 explicit = true
 [[tool.uv.index]]
-name = "torchvision-cu121"
+name = "torchvision"
 url = "https://download.pytorch.org/whl/cu121"
 explicit = true
 
@@ -102,15 +101,15 @@ explicit = true
 
 [tool.uv.sources]
 openai-whisper = { git = "https://github.com/openai/whisper.git" }
-torch = [
-  { index = "torch-cu121" },
-]
-torchaudio = [
-  { index = "torchaudio-cu121" },
-]
-torchvision = [
-  { index = "torchvision-cu121" },
-]
+#torch = [
+#  { index = "torch-cu121" },
+#]
+#torchaudio = [
+#  { index = "torchaudio-cu121" },
+#]
+#torchvision = [
+#  { index = "torchvision-cu121" },
+#]
 
 
 
