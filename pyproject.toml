@@ -40,7 +40,7 @@ packages = [
 ]
 
 [project.optional-dependencies]
-local_whisper = [
+local-whisper = [
     "torch==2.5.0+cu121",
     "torchaudio==2.5.0+cu121",
     "torchvision==0.20.0+cu121",
