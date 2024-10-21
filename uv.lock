@@ -953,7 +953,7 @@ wheels = [
 [[package]]
 name = "openai-whisper"
 version = "20240930"
-source = { registry = "https://pypi.org/simple" }
+source = { git = "https://github.com/openai/whisper.git#25639fc17ddc013d56c594bfbf7644f2185fad84" }
 dependencies = [
     { name = "more-itertools" },
     { name = "numba" },
@@ -963,7 +963,6 @@ dependencies = [
     { name = "tqdm" },
     { name = "triton", marker = "(platform_machine == 'x86_64' and sys_platform == 'linux') or sys_platform == 'linux2'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f5/77/952ca71515f81919bd8a6a4a3f89a27b09e73880cebf90957eda8f2f8545/openai-whisper-20240930.tar.gz", hash = "sha256:b7178e9c1615576807a300024f4daa6353f7e1a815dac5e38c33f1ef055dd2d2", size = 800544 }
 
 [[package]]
 name = "packaging"
@@ -976,7 +975,7 @@ wheels = [
 
 [[package]]
 name = "par-yt2text"
-version = "0.1.0"
+version = "0.1.1"
 source = { editable = "." }
 dependencies = [
     { name = "google-api-python-client" },
@@ -1011,7 +1010,7 @@ requires-dist = [
     { name = "google-auth-oauthlib", specifier = ">=1.2.1" },
     { name = "isodate", specifier = ">=0.7.2" },
     { name = "openai", specifier = ">=1.52.0" },
-    { name = "openai-whisper", specifier = ">=20240930" },
+    { name = "openai-whisper", git = "https://github.com/openai/whisper.git" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
     { name = "pytube", specifier = ">=15.0.0" },
     { name = "pytubefix", specifier = ">=8.1.1" },

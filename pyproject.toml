@@ -28,7 +28,7 @@ dependencies = [
     "google-auth-httplib2>=0.2.0",
     "google-auth-oauthlib>=1.2.1",
     "isodate>=0.7.2",
-    "openai-whisper>=20240930",
+    "openai-whisper",
     "openai>=1.52.0",
     "python-dotenv>=1.0.1",
     "pytube>=15.0.0",
@@ -70,6 +70,9 @@ dev-dependencies = [
 
 [[tool.uv.index]]
 url = "https://download.pytorch.org/whl/cu121"
+
+[tool.uv.sources]
+openai-whisper = { git = "https://github.com/openai/whisper.git" }
 
 [tool.hatch.version]
 path = "src/par_yt2text/__init__.py"
