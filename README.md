@@ -89,7 +89,7 @@ PAR_YT2TEXT_SAVE_DIR= # where to save the transcripts if you dont specify a fold
 Whisper audio transcription will only be used if you specify the `--whisper` or `--local-whisper` option and the video does not have a transcript.  
 If you want to force the use of whisper audio transcription, use the `--force-whisper` option with one of the `--whisper` or `--local-whisper` options.
 
-Often the transcript will come back a single long line. 
+Often the transcript will come back a single long line.
 PAR YT2Text will attempt to add newlines to the transcript to make it easier to read unless you specify the `--no-fix-newlines` option.
 
 ### Local Whisper

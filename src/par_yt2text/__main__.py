@@ -21,12 +21,12 @@ from pytubefix import YouTube
 
 from dotenv import load_dotenv
 
-local_whisper = False
+LOCAL_WHISPER_AVAILABLE = False
 try:
     import torch
     import whisper
 
-    local_whisper = True
+    LOCAL_WHISPER_AVAILABLE = True
 except ImportError:
     pass
 
@@ -135,6 +135,7 @@ def transcribe_audio_local(url: str, model: str = "turbo", device: str = "cpu") 
             temp_file.unlink()
 
 
+# pylint: disable=too-many-branches, too-many-statements
 def do_yt(url: str, options: Namespace) -> Tuple[str, dict[str, str]]:
     """Main YouTube function."""
 
@@ -245,6 +246,7 @@ def do_yt(url: str, options: Namespace) -> Tuple[str, dict[str, str]]:
         sys.exit(4)
 
 
+# pylint: disable=too-many-branches, too-many-statements
 def main():
     """Main function."""
     parser = argparse.ArgumentParser(
@@ -307,7 +309,7 @@ def main():
     if args.whisper and args.local_whisper:
         print("Error: --whisper and --local-whisper are mutually exclusive.")
         sys.exit(1)
-    if args.local_whisper and not local_whisper:
+    if args.local_whisper and not LOCAL_WHISPER_AVAILABLE:
         print(
             "Error: Local Whisper dependencies are not installed. See README on how to enable local Whisper."
         )
@@ -318,7 +320,7 @@ def main():
         else:
             args.whisper_model = "turbo"
 
-    if local_whisper and args.whisper_device == "auto":
+    if LOCAL_WHISPER_AVAILABLE and args.whisper_device == "auto":
         args.whisper_device = "cuda" if torch.cuda.is_available() else "cpu"
 
     out_file = None
