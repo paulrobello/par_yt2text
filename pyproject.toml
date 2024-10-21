@@ -1,0 +1,104 @@
+[project]
+name = "par_yt2text"
+dynamic = ["version"]
+description = "Extracts metadata about a video, such as the transcript, duration, and comments, with optional audio transcription using OpenAI Whisper."
+url = "https://github.com/paulrobello/par_yt2text"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [{ name = "Paul Robello", email = "probello@gmail.com" }]
+maintainers = [{ name = "Paul Robello", email = "probello@gmail.com" }]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Environment :: Console",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Sound/Audio",
+    "Topic :: Multimedia :: Video",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed"
+]
+keywords = ["youtube", "transcript"]
+
+dependencies = [
+
+    "google-api-python-client>=2.149.0",
+
+    "google-auth-httplib2>=0.2.0",
+
+    "google-auth-oauthlib>=1.2.1",
+
+    "isodate>=0.7.2",
+
+    "openai>=1.52.0",
+
+    "python-dotenv>=1.0.1",
+
+    "pytube>=15.0.0",
+
+    "pytubefix>=8.1.1",
+
+    "youtube-transcript-api>=0.6.2",
+]
+
+packages = [
+    "src/par_yt2text"
+]
+
+[project.urls]
+Homepage = "https://github.com/paulrobello/par_yt2text"
+Documentation = "https://github.com/paulrobello/par_yt2text/blob/main/README.md"
+Repository = "https://github.com/paulrobello/par_yt2text"
+Issues = "https://github.com/paulrobello/par_yt2text/issues"
+Discussions = "https://github.com/paulrobello/par_yt2text/discussions"
+Wiki = "https://github.com/paulrobello/par_yt2text/wiki"
+
+[project.scripts]
+par_yt2text = "par_yt2text.__main__:main"
+
+[build-system]
+requires = ["hatchling", "wheel"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = [
+    "build>=1.2.1",
+    "twine>=5.1.1",
+    "black>=24.8.0",
+    "pylint>=3.2.7",
+    "pyright>=1.1.379",
+    "pre-commit>=3.8.0",
+]
+
+[tool.hatch.version]
+path = "src/par_yt2text/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/par_yt2text"]
+include = [
+    "*.py",
+    "py.typed",
+    "*.png",
+    "*.md",
+    "*.tcss",
+    "*.png",
+    "*.md",
+    "*.tcss"
+]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/par_yt2text",
+    "LICENSE",
+    "README.md",
+    "pyproject.toml"
+]
+exclude = [
+    "*.pyc",
+    "__pycache__",
+    "*.so",
+    "*.dylib"
+]
