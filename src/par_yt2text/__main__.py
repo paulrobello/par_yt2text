@@ -5,10 +5,14 @@ import tempfile
 from argparse import Namespace
 from pathlib import Path
 from typing import Optional, Tuple
+import warnings
 import os
 import json
 import argparse
 import sys
+
+import torch
+import whisper
 
 import isodate
 
@@ -19,6 +23,11 @@ from youtube_transcript_api import YouTubeTranscriptApi
 from pytubefix import YouTube
 
 from dotenv import load_dotenv
+
+
+warnings.filterwarnings(
+    "ignore", "You are using `torch.load` with `weights_only=False`*."
+)
 
 # Load environment variables from .env file
 load_dotenv(os.path.expanduser(".env"))
@@ -75,17 +84,37 @@ def get_comments(youtube, video_id: str) -> list[dict]:
     return comments
 
 
+def download_audio(url: str) -> Path:
+    """Download audio track from YouTube."""
+    yt = YouTube(url)
+    stream = yt.streams.filter(only_audio=True)[0]
+    return Path(stream.download(output_path=tempfile.gettempdir()))
+
+
 def transcribe_audio(url: str, model: str = "whisper-1") -> str:
     """Transcribe an audio file using WhisperAI."""
     temp_file = None
     try:
-        yt = YouTube(url)
-        stream = yt.streams.filter(only_audio=True)[0]
-        temp_file = Path(stream.download(output_path=tempfile.gettempdir()))
+        temp_file = download_audio(url)
         client = OpenAI()
         return client.audio.transcriptions.create(
             model=model, response_format="text", file=temp_file
         )
+    except Exception as e:  # pylint: disable=broad-except
+        return "Failed to transcribe audio: " + str(e)
+    finally:
+        if temp_file:
+            temp_file.unlink()
+
+
+def transcribe_audio_local(url: str, model: str = "turbo", device: str = "cpu") -> str:
+    """Transcribe an audio file using local WhisperAI."""
+    temp_file = None
+    try:
+        temp_file = download_audio(url)
+        audio_model = whisper.load_model(model, device)
+        result = audio_model.transcribe(str(temp_file))
+        return str(result["text"])
     except Exception as e:  # pylint: disable=broad-except
         return "Failed to transcribe audio: " + str(e)
     finally:
@@ -138,19 +167,29 @@ def do_yt(url: str, options: Namespace) -> Tuple[str, dict[str, str]]:
             "published_at": item["snippet"]["publishedAt"],
         }
 
-        # Get video transcript
-        try:
-            transcript_list = YouTubeTranscriptApi.get_transcript(
-                video_id, languages=[options.lang]
-            )
-            transcript_text = " ".join([item["text"] for item in transcript_list])
-            transcript_text = transcript_text.replace("\n", " ")
-        except Exception:  # pylint: disable=broad-except, bare-except
-            transcript_text = (
-                f"Transcript not available in the selected language ({options.lang})."
-            )
+        if options.force_whisper and (options.whisper or options.local_whisper):
             if options.whisper:
                 transcript_text = transcribe_audio(url, options.whisper_model)
+            else:
+                transcript_text = transcribe_audio_local(
+                    url, options.whisper_model, options.whisper_device
+                )
+        else:
+            # Get video transcript
+            try:
+                transcript_list = YouTubeTranscriptApi.get_transcript(
+                    video_id, languages=[options.lang]
+                )
+                transcript_text = " ".join([item["text"] for item in transcript_list])
+                transcript_text = transcript_text.replace("\n", " ")
+            except Exception:  # pylint: disable=broad-except, bare-except
+                transcript_text = f"Transcript not available in the selected language ({options.lang})."
+                if options.whisper:
+                    transcript_text = transcribe_audio(url, options.whisper_model)
+                else:
+                    transcript_text = transcribe_audio_local(
+                        url, options.whisper_model, options.whisper_device
+                    )
 
         # Get comments if the flag is set
         comments = []
@@ -220,9 +259,25 @@ def main():
         help="Use OpenAI Whisper to transcribe the audio if transcript is not available",
     )
     parser.add_argument(
+        "--local-whisper",
+        action="store_true",
+        help="Use Local OpenAI Whisper to transcribe the audio if transcript is not available",
+    )
+    parser.add_argument(
+        "--whisper-device",
+        help="Device to use for local Whisper cpu, cuda (default: auto)",
+        default="auto",
+        choices=["auto", "cpu", "cuda"],
+    )
+
+    parser.add_argument(
+        "--force-whisper",
+        action="store_true",
+        help="Force use of selected Whisper to transcribe the audio even if transcript is available",
+    )
+    parser.add_argument(
         "--whisper-model",
-        default="whisper-1",
-        help="Whisper model to use for audio transcription (default: whisper-1)",
+        help="Whisper model to use for audio transcription (default-api: whisper-1, default-local: turbo)",
     )
     parser.add_argument(
         "--lang", default="en", help="Language for the transcript (default: English)"
@@ -234,6 +289,17 @@ def main():
     if args.url is None:
         print("Error: No URL provided.")
         return
+    if args.whisper and args.local_whisper:
+        print("Error: --whisper and --local-whisper are mutually exclusive.")
+        return
+    if not args.whisper_model:
+        if args.whisper:
+            args.whisper_model = "whisper-1"
+        else:
+            args.whisper_model = "turbo"
+
+    if args.whisper_device == "auto":
+        args.whisper_device = "cuda" if torch.cuda.is_available() else "cpu"
 
     out_file = None
     if args.save:

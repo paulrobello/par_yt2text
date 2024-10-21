@@ -21,7 +21,7 @@ PAR YT2Text Based on yt By Daniel Miessler with the addition of OpenAI Whisper f
 
 * To install PAR YT2Text, make sure you have Python 3.11.
 * Create a GOOGLE API key
-* If you want to use OpenAI Whisper API, create an OPENAI API key
+* If you want to use OpenAI Whisper API, create an OPENAI API key (An OpenAI key is not needed for local OpenAI Whisper).
 
 ### [uv](https://pypi.org/project/uv/) is recommended
 
@@ -68,14 +68,20 @@ pipx install par_yt2text
 Create a file called `~/.par_yt2text.env` with your Google API key and OpenAI API key in it.
 ```bash
 GOOGLE_API_KEY= # needed for youtube-transcript-api
-OPENAI_API_KEY= # needed for OpenAI whisper audio transcription
+OPENAI_API_KEY= # needed for OpenAI API whisper audio transcription (An OpenAI key is not needed for local OpenAI Whisper).
 PAR_YT2TEXT_SAVE_DIR= # where to save the transcripts if you dont specify a folder in the --save option
 ```
-Whisper audio transcription will only be used if you specify the `--whisper` option and the video does not have a transcript.
+
+Whisper audio transcription will only be used if you specify the `--whisper` or `--local-whisper` option and the video does not have a transcript.  
+If you want to force the use of whisper audio transcription, use the `--force-whisper` option with one of the `--whisper` or `--local-whisper` options.
 
 Often the transcript will come back a single long line. 
 PAR YT2Text will attempt to add newlines to the transcript to make it easier to read unless you specify the `--no-fix-newlines` option.
 
+### Local Whisper
+While the OpenAI Whisper API is fast and inexpensive a free local option is available.  
+**NOTE: Local whisper mode can be very slow on cpu. If you have a CUDA enabled GPU it will be used unless you specify the `--whisper-device` option.**  
+Consult the [OpenAI Whisper documentation](https://github.com/openai/whisper?tab=readme-ov-file#available-models-and-languages) to see what models are available and select the best one for your VRAM needs.
 
 ### Running from source
 ```bash
@@ -89,8 +95,8 @@ par_yt2text --transcript --whisper 'https://www.youtube.com/watch?v=COSpqsDjiiw'
 
 ### Options
 ```
-usage: par_yt2text [-h] [--duration] [--transcript] [--comments] [--metadata] [--no-fix-newlines] [--whisper]
-                   [--whisper-model WHISPER_MODEL] [--lang LANG] [--save FILE]
+usage: par_yt2text [-h] [--duration] [--transcript] [--comments] [--metadata] [--no-fix-newlines] [--whisper] [--local-whisper]
+                   [--whisper-device {auto,cpu,cuda}] [--force-whisper] [--whisper-model WHISPER_MODEL] [--lang LANG] [--save FILE]
                    url
 
 positional arguments:
@@ -104,14 +110,19 @@ options:
   --metadata            Output the video metadata
   --no-fix-newlines     Dont attempt to fix missing newlines from sentences
   --whisper             Use OpenAI Whisper to transcribe the audio if transcript is not available
+  --local-whisper       Use Local OpenAI Whisper to transcribe the audio if transcript is not available
+  --whisper-device {auto,cpu,cuda}
+                        Device to use for local Whisper cpu, cuda (default: auto)
+  --force-whisper       Force use of selected Whisper to transcribe the audio even if transcript is available
   --whisper-model WHISPER_MODEL
-                        Whisper model to use for audio transcription (default: whisper-1)
+                        Whisper model to use for audio transcription (default-api: whisper-1, default-local: turbo)
   --lang LANG           Language for the transcript (default: English)
-  --save FILE           Save the output to a file
-```
+  --save FILE           Save the output to a file```
 
 
 ## Whats New
+- Version 0.1.1:
+  - Added support for local OpenAI Whisper
 - Version 0.1.0:
   - Initial release
 
