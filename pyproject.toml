@@ -28,19 +28,23 @@ dependencies = [
     "google-auth-httplib2>=0.2.0",
     "google-auth-oauthlib>=1.2.1",
     "isodate>=0.7.2",
-    "openai-whisper",
     "openai>=1.52.0",
     "python-dotenv>=1.0.1",
     "pytube>=15.0.0",
     "pytubefix>=8.1.1",
-    "torch==2.5.0+cu121",
-    "torchaudio==2.5.0+cu121",
-    "torchvision==0.20.0+cu121",
     "youtube-transcript-api>=0.6.2",
 ]
 
 packages = [
     "src/par_yt2text"
+]
+
+[project.optional-dependencies]
+local_whisper = [
+    "torch==2.5.0+cu121",
+    "torchaudio==2.5.0+cu121",
+    "torchvision==0.20.0+cu121",
+    "openai-whisper",
 ]
 
 [project.urls]
@@ -68,11 +72,47 @@ dev-dependencies = [
     "pre-commit>=3.8.0",
 ]
 
+#url = "https://download.pytorch.org/whl/cu121"
 [[tool.uv.index]]
+name = "torch-cu121"
 url = "https://download.pytorch.org/whl/cu121"
+explicit = true
+[[tool.uv.index]]
+name = "torchaudio-cu121"
+url = "https://download.pytorch.org/whl/cu121"
+explicit = true
+[[tool.uv.index]]
+name = "torchvision-cu121"
+url = "https://download.pytorch.org/whl/cu121"
+explicit = true
+
+[[tool.uv.index]]
+name = "torch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+[[tool.uv.index]]
+name = "torchaudio-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+[[tool.uv.index]]
+name = "torchvision-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
 
 [tool.uv.sources]
 openai-whisper = { git = "https://github.com/openai/whisper.git" }
+torch = [
+  { index = "torch-cu121" },
+]
+torchaudio = [
+  { index = "torchaudio-cu121" },
+]
+torchvision = [
+  { index = "torchvision-cu121" },
+]
+
+
 
 [tool.hatch.version]
 path = "src/par_yt2text/__init__.py"
