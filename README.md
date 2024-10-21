@@ -37,24 +37,25 @@ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | ie
 
 ## Installation
 
-### Installation From Source
+### Installation From Source WITHOUT support for local OpenAI Whisper
 
-Then, follow these steps:
+* Clone the repository:
+```bash
+git clone https://github.com/paulrobello/par_yt2text.git
+cd par_yt2text
+uv sync
+```
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/paulrobello/par_yt2text.git
-   cd par_yt2text
-   ```
+### Installation From Source WITH support for local OpenAI Whisper
 
-2. Install the package dependencies using uv:
-   ```bash
-   uv sync
-   ```
+* Clone the repository:
+```bash
+git clone https://github.com/paulrobello/par_yt2text.git
+cd par_yt2text
+uv sync -U --extra local-whisper
+```
 
-### Installation From PyPI
-
-To install PAR YT2Text from PyPI, run any of the following commands:
+### Installation From PyPI WITHOUT support for local OpenAI Whisper
 
 ```bash
 uv tool install par_yt2text
@@ -63,6 +64,19 @@ uv tool install par_yt2text
 ```bash
 pipx install par_yt2text
 ```
+
+### Installation From PyPI WITH support for local OpenAI Whisper
+
+To install PAR YT2Text from PyPI with local OpenAI Whisper, run any of the following commands:
+
+```bash
+uv tool install -U 'git+https://github.com/paulrobello/par_yt2text[local-whisper]' --index https://download.pytorch.org/whl/cu121 --index-strategy unsafe-best-match
+```
+
+```bash
+pipx install 'par_yt2text[local-whisper] @ git+https://github.com/paulrobello/par_yt2text' --pip-args="--extra-index-url https://download.pytorch.org/whl/cu121"
+```
+
 
 ## Usage
 Create a file called `~/.par_yt2text.env` with your Google API key and OpenAI API key in it.
@@ -81,7 +95,7 @@ PAR YT2Text will attempt to add newlines to the transcript to make it easier to 
 ### Local Whisper
 While the OpenAI Whisper API is fast and inexpensive a free local option is available.  
 **NOTE: Local whisper mode can be very slow on cpu. If you have a CUDA enabled GPU it will be used unless you specify the `--whisper-device` option.**  
-Consult the [OpenAI Whisper documentation](https://github.com/openai/whisper?tab=readme-ov-file#available-models-and-languages) to see what models are available and select the best one for your VRAM needs.
+`turbo` is the default local model however you should consult the [OpenAI Whisper documentation](https://github.com/openai/whisper?tab=readme-ov-file#available-models-and-languages) to see what models are available and select the best one for your VRAM needs.
 
 ### Running from source
 ```bash
@@ -91,6 +105,11 @@ uv run par_yt2text --transcript --whisper 'https://www.youtube.com/watch?v=COSpq
 ### Running if installed from PyPI
 ```bash
 par_yt2text --transcript --whisper 'https://www.youtube.com/watch?v=COSpqsDjiiw'
+```
+
+### Example of forcing use of local Whisper if tool was installed with local Whisper enabled
+```bash
+par_yt2text --transcript --force-whisper --whisper-local 'https://www.youtube.com/watch?v=COSpqsDjiiw'
 ```
 
 ### Options
@@ -117,11 +136,12 @@ options:
   --whisper-model WHISPER_MODEL
                         Whisper model to use for audio transcription (default-api: whisper-1, default-local: turbo)
   --lang LANG           Language for the transcript (default: English)
-  --save FILE           Save the output to a file```
+  --save FILE           Save the output to a file
+```
 
 
 ## Whats New
-- Version 0.1.1:
+- Version 0.2.0:
   - Added support for local OpenAI Whisper
 - Version 0.1.0:
   - Initial release

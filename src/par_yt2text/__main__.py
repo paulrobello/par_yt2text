@@ -11,9 +11,6 @@ import json
 import argparse
 import sys
 
-import torch
-import whisper
-
 import isodate
 
 from googleapiclient.discovery import build
@@ -24,6 +21,14 @@ from pytubefix import YouTube
 
 from dotenv import load_dotenv
 
+local_whisper = False
+try:
+    import torch
+    import whisper
+
+    local_whisper = True
+except ImportError:
+    pass
 
 warnings.filterwarnings(
     "ignore", "You are using `torch.load` with `weights_only=False`*."
@@ -32,6 +37,11 @@ warnings.filterwarnings(
 # Load environment variables from .env file
 load_dotenv(os.path.expanduser(".env"))
 load_dotenv(os.path.expanduser("~/.par_yt2text.env"))
+
+
+def eprint(*args, **kwargs) -> None:
+    """Print to stderr."""
+    print(*args, file=sys.stderr, **kwargs)
 
 
 def get_video_id(url: str) -> Optional[str]:
@@ -86,6 +96,7 @@ def get_comments(youtube, video_id: str) -> list[dict]:
 
 def download_audio(url: str) -> Path:
     """Download audio track from YouTube."""
+    eprint("Downloading audio track...")
     yt = YouTube(url)
     stream = yt.streams.filter(only_audio=True)[0]
     return Path(stream.download(output_path=tempfile.gettempdir()))
@@ -96,6 +107,7 @@ def transcribe_audio(url: str, model: str = "whisper-1") -> str:
     temp_file = None
     try:
         temp_file = download_audio(url)
+        eprint("Transcribing audio track using API...")
         client = OpenAI()
         return client.audio.transcriptions.create(
             model=model, response_format="text", file=temp_file
@@ -112,6 +124,7 @@ def transcribe_audio_local(url: str, model: str = "turbo", device: str = "cpu") 
     temp_file = None
     try:
         temp_file = download_audio(url)
+        eprint("Transcribing audio track using local model...")
         audio_model = whisper.load_model(model, device)
         result = audio_model.transcribe(str(temp_file))
         return str(result["text"])
@@ -135,6 +148,8 @@ def do_yt(url: str, options: Namespace) -> Tuple[str, dict[str, str]]:
             "Error: --whisper requires OPENAI_API_KEY not found in ~/.par_yt2text.env"
         )
         sys.exit(2)
+
+    eprint("Getting video metadata...")
 
     # Extract video ID from URL
     video_id = get_video_id(url)
@@ -291,14 +306,19 @@ def main():
         return
     if args.whisper and args.local_whisper:
         print("Error: --whisper and --local-whisper are mutually exclusive.")
-        return
+        sys.exit(1)
+    if args.local_whisper and not local_whisper:
+        print(
+            "Error: Local Whisper dependencies are not installed. See README on how to enable local Whisper."
+        )
+        sys.exit(1)
     if not args.whisper_model:
         if args.whisper:
             args.whisper_model = "whisper-1"
         else:
             args.whisper_model = "turbo"
 
-    if args.whisper_device == "auto":
+    if local_whisper and args.whisper_device == "auto":
         args.whisper_device = "cuda" if torch.cuda.is_available() else "cpu"
 
     out_file = None
