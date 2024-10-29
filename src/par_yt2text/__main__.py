@@ -4,7 +4,6 @@ import re
 import tempfile
 from argparse import Namespace
 from pathlib import Path
-from typing import Optional, Tuple
 import warnings
 import os
 import json
@@ -30,9 +29,7 @@ try:
 except ImportError:
     pass
 
-warnings.filterwarnings(
-    "ignore", "You are using `torch.load` with `weights_only=False`*."
-)
+warnings.filterwarnings("ignore", "You are using `torch.load` with `weights_only=False`*.")
 
 # Load environment variables from .env file
 load_dotenv(os.path.expanduser(".env"))
@@ -44,7 +41,7 @@ def eprint(*args, **kwargs) -> None:
     print(*args, file=sys.stderr, **kwargs)
 
 
-def get_video_id(url: str) -> Optional[str]:
+def get_video_id(url: str) -> str | None:
     """Extract video ID from URL."""
     pattern = r"(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})"  # pylint: disable=line-too-long
     match = re.search(pattern, url)
@@ -68,9 +65,7 @@ def get_comments(youtube, video_id: str) -> list[dict]:
             response = request.execute()
             for item in response["items"]:
                 # Top-level comment
-                top_level_comment = item["snippet"]["topLevelComment"]["snippet"][
-                    "textDisplay"
-                ]
+                top_level_comment = item["snippet"]["topLevelComment"]["snippet"]["textDisplay"]
                 comments.append(top_level_comment)
 
                 # Check if there are replies in the thread
@@ -82,9 +77,7 @@ def get_comments(youtube, video_id: str) -> list[dict]:
 
             # Prepare the next page of comments, if available
             if "nextPageToken" in response:
-                request = youtube.commentThreads().list_next(
-                    previous_request=request, previous_response=response
-                )
+                request = youtube.commentThreads().list_next(previous_request=request, previous_response=response)
             else:
                 request = None
 
@@ -109,9 +102,7 @@ def transcribe_audio(url: str, model: str = "whisper-1") -> str:
         temp_file = download_audio(url)
         eprint("Transcribing audio track using API...")
         client = OpenAI()
-        return client.audio.transcriptions.create(
-            model=model, response_format="text", file=temp_file
-        )
+        return client.audio.transcriptions.create(model=model, response_format="text", file=temp_file)
     except Exception as e:  # pylint: disable=broad-except
         return "Failed to transcribe audio: " + str(e)
     finally:
@@ -136,7 +127,7 @@ def transcribe_audio_local(url: str, model: str = "turbo", device: str = "cpu") 
 
 
 # pylint: disable=too-many-branches, too-many-statements
-def do_yt(url: str, options: Namespace) -> Tuple[str, dict[str, str]]:
+def do_yt(url: str, options: Namespace) -> tuple[str, dict[str, str]]:
     """Main YouTube function."""
 
     api_key = os.getenv("GOOGLE_API_KEY")
@@ -145,9 +136,7 @@ def do_yt(url: str, options: Namespace) -> Tuple[str, dict[str, str]]:
         sys.exit(1)
 
     if options.whisper and not os.environ.get("OPENAI_API_KEY"):
-        print(
-            "Error: --whisper requires OPENAI_API_KEY not found in ~/.par_yt2text.env"
-        )
+        print("Error: --whisper requires OPENAI_API_KEY not found in ~/.par_yt2text.env")
         sys.exit(2)
 
     eprint("Getting video metadata...")
@@ -187,15 +176,11 @@ def do_yt(url: str, options: Namespace) -> Tuple[str, dict[str, str]]:
             if options.whisper:
                 transcript_text = transcribe_audio(url, options.whisper_model)
             else:
-                transcript_text = transcribe_audio_local(
-                    url, options.whisper_model, options.whisper_device
-                )
+                transcript_text = transcribe_audio_local(url, options.whisper_model, options.whisper_device)
         else:
             # Get video transcript
             try:
-                transcript_list = YouTubeTranscriptApi.get_transcript(
-                    video_id, languages=[options.lang]
-                )
+                transcript_list = YouTubeTranscriptApi.get_transcript(video_id, languages=[options.lang])
                 transcript_text = " ".join([item["text"] for item in transcript_list])
                 transcript_text = transcript_text.replace("\n", " ")
             except Exception:  # pylint: disable=broad-except, bare-except
@@ -203,9 +188,7 @@ def do_yt(url: str, options: Namespace) -> Tuple[str, dict[str, str]]:
                 if options.whisper:
                     transcript_text = transcribe_audio(url, options.whisper_model)
                 else:
-                    transcript_text = transcribe_audio_local(
-                        url, options.whisper_model, options.whisper_device
-                    )
+                    transcript_text = transcribe_audio_local(url, options.whisper_model, options.whisper_device)
 
         # Get comments if the flag is set
         comments = []
@@ -233,16 +216,10 @@ def do_yt(url: str, options: Namespace) -> Tuple[str, dict[str, str]]:
                 indent=2,
             )
         # Remove non-printable characters
-        output = (
-            "".join(c for c in output if (c.isprintable() or c == "\n") and c != "Â")
-            .replace("â", "'")
-            .strip()
-        )
+        output = "".join(c for c in output if (c.isprintable() or c == "\n") and c != "Â").replace("â", "'").strip()
         return output, metadata
     except HttpError as e:
-        print(
-            f"Error: Failed to access YouTube API. Please check your GOOGLE_API_KEY and ensure it is valid: {e}"
-        )
+        print(f"Error: Failed to access YouTube API. Please check your GOOGLE_API_KEY and ensure it is valid: {e}")
         sys.exit(4)
 
 
@@ -253,18 +230,10 @@ def main():
         description="par_yt2text extracts metadata about a video, such as the transcript, duration, and comments. Based on yt By Daniel Miessler."  # pylint: disable=line-too-long
     )
     parser.add_argument("url", help="YouTube video URL")
-    parser.add_argument(
-        "--duration", action="store_true", help="Output only the duration"
-    )
-    parser.add_argument(
-        "--transcript", action="store_true", help="Output only the transcript"
-    )
-    parser.add_argument(
-        "--comments", action="store_true", help="Output the comments on the video"
-    )
-    parser.add_argument(
-        "--metadata", action="store_true", help="Output the video metadata"
-    )
+    parser.add_argument("--duration", action="store_true", help="Output only the duration")
+    parser.add_argument("--transcript", action="store_true", help="Output only the transcript")
+    parser.add_argument("--comments", action="store_true", help="Output the comments on the video")
+    parser.add_argument("--metadata", action="store_true", help="Output the video metadata")
     parser.add_argument(
         "--no-fix-newlines",
         action="store_true",
@@ -296,9 +265,7 @@ def main():
         "--whisper-model",
         help="Whisper model to use for audio transcription (default-api: whisper-1, default-local: turbo)",
     )
-    parser.add_argument(
-        "--lang", default="en", help="Language for the transcript (default: English)"
-    )
+    parser.add_argument("--lang", default="en", help="Language for the transcript (default: English)")
     parser.add_argument("--save", metavar="FILE", help="Save the output to a file")
 
     args = parser.parse_args()
@@ -310,9 +277,7 @@ def main():
         print("Error: --whisper and --local-whisper are mutually exclusive.")
         sys.exit(1)
     if args.local_whisper and not LOCAL_WHISPER_AVAILABLE:
-        print(
-            "Error: Local Whisper dependencies are not installed. See README on how to enable local Whisper."
-        )
+        print("Error: Local Whisper dependencies are not installed. See README on how to enable local Whisper.")
         sys.exit(1)
     if not args.whisper_model:
         if args.whisper:
@@ -351,7 +316,7 @@ def main():
             if not out_file.parent.is_dir():
                 out_file.parent.mkdir(parents=True)
             out_file.write_text(output, encoding="utf-8")
-        except IOError as e:
+        except OSError as e:
             print(f"Error saving output to file: {e}", file=sys.stderr)
 
 

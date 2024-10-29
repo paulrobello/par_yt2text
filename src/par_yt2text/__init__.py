@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import os
-
 __author__ = "Paul Robello"
 __copyright__ = "Copyright 2024, Paul Robello"
 __credits__ = ["Paul Robello"]

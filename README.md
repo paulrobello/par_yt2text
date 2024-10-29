@@ -14,7 +14,7 @@ PAR YT2Text Based on yt By Daniel Miessler with the addition of OpenAI Whisper f
 ## Features
 
 - Extract metadata, transcripts, and comments from YouTube videos
-- If the transcript is not available, optionally use OpenAI Whisper API to transcribe the audio
+- If the transcript is not available, optionally use OpenAI Whisper API or Local model to transcribe the audio
 
 
 ## Prerequisites
