@@ -141,6 +141,8 @@ options:
 
 
 ## Whats New
+- Version 0.2.1:
+  - Updated dependencies
 - Version 0.2.0:
   - Added support for local OpenAI Whisper
 - Version 0.1.0:
