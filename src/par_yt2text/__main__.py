@@ -1,24 +1,22 @@
 """YouTube to Text CLI tool."""
 
+import argparse
+import json
+import os
 import re
+import sys
 import tempfile
+import warnings
 from argparse import Namespace
 from pathlib import Path
-import warnings
-import os
-import json
-import argparse
-import sys
 
 import isodate
-
+from dotenv import load_dotenv
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from openai import OpenAI
-from youtube_transcript_api import YouTubeTranscriptApi
 from pytubefix import YouTube
-
-from dotenv import load_dotenv
+from youtube_transcript_api import YouTubeTranscriptApi
 
 LOCAL_WHISPER_AVAILABLE = False
 try:
