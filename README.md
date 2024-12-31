@@ -141,6 +141,8 @@ options:
 
 
 ## Whats New
+- Version 0.2.2:
+  - Updated dependencies
 - Version 0.2.1:
   - Updated dependencies
 - Version 0.2.0:

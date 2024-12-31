@@ -30,3 +30,5 @@
 **/.venv/
 .aider*
 .env
+/dist/
+/.ruff_cache/
