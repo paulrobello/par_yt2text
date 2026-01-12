@@ -178,8 +178,9 @@ def do_yt(url: str, options: Namespace) -> tuple[str, dict[str, str]]:
         else:
             # Get video transcript
             try:
-                transcript_list = YouTubeTranscriptApi.get_transcript(video_id, languages=[options.lang])
-                transcript_text = " ".join([item["text"] for item in transcript_list])
+                ytt_api = YouTubeTranscriptApi()
+                transcript_list = ytt_api.fetch(video_id, languages=[options.lang])
+                transcript_text = " ".join([entry.text for entry in transcript_list])
                 transcript_text = transcript_text.replace("\n", " ")
             except Exception:  # pylint: disable=broad-except, bare-except
                 transcript_text = f"Transcript not available in the selected language ({options.lang})."
@@ -289,7 +290,8 @@ def main():
     out_file = None
     if args.save:
         out_file = Path(args.save)
-        if "/" not in args.save:
+        # Check if path has no directory component (just a filename)
+        if out_file.parent == Path("."):
             base_dir = os.environ.get("PAR_YT2TEXT_SAVE_DIR")
             if base_dir:
                 out_file = Path(base_dir) / out_file

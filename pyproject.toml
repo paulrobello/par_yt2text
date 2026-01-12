@@ -16,6 +16,8 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Operating System :: MacOS",
     "Operating System :: Microsoft :: Windows :: Windows 10",
     "Operating System :: Microsoft :: Windows :: Windows 11",
@@ -129,3 +131,9 @@ exclude = [
     "*.so",
     "*.dylib"
 ]
+
+[tool.ruff]
+target-version = "py314"
+
+[tool.pyright]
+pythonVersion = "3.14"

@@ -141,6 +141,10 @@ options:
 
 
 ## Whats New
+- Version 0.2.4:
+  - Fixed cross-platform path handling for Windows compatibility
+- Version 0.2.3:
+  - Updated dependencies and ensure Python 3.14 compatibility
 - Version 0.2.2:
   - Updated dependencies
 - Version 0.2.1:
