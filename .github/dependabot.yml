@@ -1,0 +1,12 @@
+version: 2
+updates:
+  - package-ecosystem: "uv"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    ignore:
+      # torch/torchaudio/torchvision use a custom PyTorch index with pinned
+      # CUDA-specific versions that Dependabot cannot resolve
+      - dependency-name: "torch"
+      - dependency-name: "torchaudio"
+      - dependency-name: "torchvision"
