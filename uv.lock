@@ -2423,11 +2423,11 @@ dependencies = [
     { name = "typing-extensions" },
 ]
 wheels = [
-    { url = "https://download.pytorch.org/whl/cu121/torch-2.5.0%2Bcu121-cp311-cp311-linux_x86_64.whl", hash = "sha256:9ed5e72704a2ad34a9c21890c8b326d76abc2389cfab0247246afd0d64040694" },
-    { url = "https://download.pytorch.org/whl/cu121/torch-2.5.0%2Bcu121-cp311-cp311-win_amd64.whl", hash = "sha256:d4b17139c5b6658045347ddae9593e48ef5d974de2409c63512f99282e00c5dd" },
-    { url = "https://download.pytorch.org/whl/cu121/torch-2.5.0%2Bcu121-cp312-cp312-linux_x86_64.whl", hash = "sha256:c4e0eb78c24d6991db93d86f06809edb10ac15220363b04ef18e22da50f059fe" },
-    { url = "https://download.pytorch.org/whl/cu121/torch-2.5.0%2Bcu121-cp312-cp312-win_amd64.whl", hash = "sha256:47c7c44710bc91f1bd1a8012b4e43da57ca6e71589296bba146c1b18f2639efe" },
-    { url = "https://download.pytorch.org/whl/cu121/torch-2.5.0%2Bcu121-cp313-cp313-linux_x86_64.whl", hash = "sha256:d463a57e068bfaa6eaf8d8c197586b58fb5ae1a27b8e68360a4576d99f06eb00" },
+    { url = "https://download-r2.pytorch.org/whl/cu121/torch-2.5.0%2Bcu121-cp311-cp311-linux_x86_64.whl", hash = "sha256:9ed5e72704a2ad34a9c21890c8b326d76abc2389cfab0247246afd0d64040694", upload-time = "2024-10-17T22:25:02Z" },
+    { url = "https://download-r2.pytorch.org/whl/cu121/torch-2.5.0%2Bcu121-cp311-cp311-win_amd64.whl", hash = "sha256:d4b17139c5b6658045347ddae9593e48ef5d974de2409c63512f99282e00c5dd", upload-time = "2024-10-17T22:25:40Z" },
+    { url = "https://download-r2.pytorch.org/whl/cu121/torch-2.5.0%2Bcu121-cp312-cp312-linux_x86_64.whl", hash = "sha256:c4e0eb78c24d6991db93d86f06809edb10ac15220363b04ef18e22da50f059fe", upload-time = "2024-10-17T22:27:36Z" },
+    { url = "https://download-r2.pytorch.org/whl/cu121/torch-2.5.0%2Bcu121-cp312-cp312-win_amd64.whl", hash = "sha256:47c7c44710bc91f1bd1a8012b4e43da57ca6e71589296bba146c1b18f2639efe", upload-time = "2024-10-17T22:28:09Z" },
+    { url = "https://download-r2.pytorch.org/whl/cu121/torch-2.5.0%2Bcu121-cp313-cp313-linux_x86_64.whl", hash = "sha256:d463a57e068bfaa6eaf8d8c197586b58fb5ae1a27b8e68360a4576d99f06eb00", upload-time = "2024-10-17T22:29:54Z" },
 ]
 
 [[package]]
@@ -2438,10 +2438,10 @@ dependencies = [
     { name = "torch" },
 ]
 wheels = [
-    { url = "https://download-r2.pytorch.org/whl/cu121/torchaudio-2.5.0%2Bcu121-cp311-cp311-linux_x86_64.whl", hash = "sha256:be30d738f208931ed104dcb8b0d64b7281a560774c65f76383e73fcc382fdf47" },
-    { url = "https://download-r2.pytorch.org/whl/cu121/torchaudio-2.5.0%2Bcu121-cp311-cp311-win_amd64.whl", hash = "sha256:093a645cad3bc6a8e9e8d425bdfa0867914fa4c089d6910d4a2a4fdf8e24a89e" },
-    { url = "https://download-r2.pytorch.org/whl/cu121/torchaudio-2.5.0%2Bcu121-cp312-cp312-linux_x86_64.whl", hash = "sha256:6f06233a9e32b1997ebd1b9736321cd88e6f156aeef225529ac31dc5bb056024" },
-    { url = "https://download-r2.pytorch.org/whl/cu121/torchaudio-2.5.0%2Bcu121-cp312-cp312-win_amd64.whl", hash = "sha256:bb76946169331190ce88d31dd5916fd044ae6f814d473264cf1c385cbc4c0382" },
+    { url = "https://download-r2.pytorch.org/whl/cu121/torchaudio-2.5.0%2Bcu121-cp311-cp311-linux_x86_64.whl", hash = "sha256:be30d738f208931ed104dcb8b0d64b7281a560774c65f76383e73fcc382fdf47", upload-time = "2024-10-17T22:32:55Z" },
+    { url = "https://download-r2.pytorch.org/whl/cu121/torchaudio-2.5.0%2Bcu121-cp311-cp311-win_amd64.whl", hash = "sha256:093a645cad3bc6a8e9e8d425bdfa0867914fa4c089d6910d4a2a4fdf8e24a89e", upload-time = "2024-10-17T22:32:55Z" },
+    { url = "https://download-r2.pytorch.org/whl/cu121/torchaudio-2.5.0%2Bcu121-cp312-cp312-linux_x86_64.whl", hash = "sha256:6f06233a9e32b1997ebd1b9736321cd88e6f156aeef225529ac31dc5bb056024", upload-time = "2024-10-17T22:32:56Z" },
+    { url = "https://download-r2.pytorch.org/whl/cu121/torchaudio-2.5.0%2Bcu121-cp312-cp312-win_amd64.whl", hash = "sha256:bb76946169331190ce88d31dd5916fd044ae6f814d473264cf1c385cbc4c0382", upload-time = "2024-10-17T22:32:57Z" },
 ]
 
 [[package]]
@@ -2454,10 +2454,10 @@ dependencies = [
     { name = "torch" },
 ]
 wheels = [
-    { url = "https://download-r2.pytorch.org/whl/cu121/torchvision-0.20.0%2Bcu121-cp311-cp311-linux_x86_64.whl", hash = "sha256:6c4fa10b87d89fe2863fff773b9491d26095e60fbd59b0310ca0e33f382a7cbf" },
-    { url = "https://download-r2.pytorch.org/whl/cu121/torchvision-0.20.0%2Bcu121-cp311-cp311-win_amd64.whl", hash = "sha256:72f92a5854e141a885fc5585829e9ece6ef07ea85c7058aaf631ad83b456a24b" },
-    { url = "https://download-r2.pytorch.org/whl/cu121/torchvision-0.20.0%2Bcu121-cp312-cp312-linux_x86_64.whl", hash = "sha256:e794f7728dd5cec0d9bfa12749019d072a841e8dc2cdc1aba09afc63c5bb7ec3" },
-    { url = "https://download-r2.pytorch.org/whl/cu121/torchvision-0.20.0%2Bcu121-cp312-cp312-win_amd64.whl", hash = "sha256:2d40dd35b287ba557f115a2881fe6304c4693e0e7147eb1be963da46b955b2c6" },
+    { url = "https://download-r2.pytorch.org/whl/cu121/torchvision-0.20.0%2Bcu121-cp311-cp311-linux_x86_64.whl", hash = "sha256:6c4fa10b87d89fe2863fff773b9491d26095e60fbd59b0310ca0e33f382a7cbf", upload-time = "2024-10-17T22:33:01Z" },
+    { url = "https://download-r2.pytorch.org/whl/cu121/torchvision-0.20.0%2Bcu121-cp311-cp311-win_amd64.whl", hash = "sha256:72f92a5854e141a885fc5585829e9ece6ef07ea85c7058aaf631ad83b456a24b", upload-time = "2024-10-17T22:33:01Z" },
+    { url = "https://download-r2.pytorch.org/whl/cu121/torchvision-0.20.0%2Bcu121-cp312-cp312-linux_x86_64.whl", hash = "sha256:e794f7728dd5cec0d9bfa12749019d072a841e8dc2cdc1aba09afc63c5bb7ec3", upload-time = "2024-10-17T22:33:02Z" },
+    { url = "https://download-r2.pytorch.org/whl/cu121/torchvision-0.20.0%2Bcu121-cp312-cp312-win_amd64.whl", hash = "sha256:2d40dd35b287ba557f115a2881fe6304c4693e0e7147eb1be963da46b955b2c6", upload-time = "2024-10-17T22:33:02Z" },
 ]
 
 [[package]]
@@ -2536,11 +2536,11 @@ wheels = [
 
 [[package]]
 name = "urllib3"
-version = "2.6.3"
+version = "2.7.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/c7/24/5f1b3bdffd70275f6661c76461e25f024d5a38a46f04aaca912426a2b1d3/urllib3-2.6.3.tar.gz", hash = "sha256:1b62b6884944a57dbe321509ab94fd4d3b307075e0c2eae991ac71ee15ad38ed", size = 435556, upload-time = "2026-01-07T16:24:43.925Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/53/0c/06f8b233b8fd13b9e5ee11424ef85419ba0d8ba0b3138bf360be2ff56953/urllib3-2.7.0.tar.gz", hash = "sha256:231e0ec3b63ceb14667c67be60f2f2c40a518cb38b03af60abc813da26505f4c", size = 433602, upload-time = "2026-05-07T16:13:18.596Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/39/08/aaaad47bc4e9dc8c725e68f9d04865dbcb2052843ff09c97b08904852d84/urllib3-2.6.3-py3-none-any.whl", hash = "sha256:bf272323e553dfb2e87d9bfd225ca7b0f467b919d7bbd355436d3fd37cb0acd4", size = 131584, upload-time = "2026-01-07T16:24:42.685Z" },
+    { url = "https://files.pythonhosted.org/packages/7f/3e/5db95bcf282c52709639744ca2a8b149baccf648e39c8cc87553df9eae0c/urllib3-2.7.0-py3-none-any.whl", hash = "sha256:9fb4c81ebbb1ce9531cce37674bbc6f1360472bc18ca9a553ede278ef7276897", size = 131087, upload-time = "2026-05-07T16:13:17.151Z" },
 ]
 
 [[package]]
